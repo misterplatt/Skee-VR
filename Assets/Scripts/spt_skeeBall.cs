@@ -35,10 +35,60 @@ public class spt_skeeBall : MonoBehaviour {
         m_InteractiveItem.OnUp -= HandleUp;
     }
 
+    // Use this for initialization
+    void Start()
+    {
+        //Find radial and rigidbody component, initialize throwForce to base
+        selectionRadial = GameObject.Find("UISelectionBar").GetComponent<Image>();
+        rb = GetComponent<Rigidbody>();
+        throwForce = baseThrowForce;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        //Destroy skeeball in hand on gameOver
+        if (ballHeld && spt_scoreKeeper.gameOver) Destroy(gameObject);
+        //Keep the skeeball in front of players at all times
+        if (ballHeld)
+        {
+            rb.velocity = Vector3.zero;
+            transform.rotation = GameObject.Find("HoldPoint").transform.rotation;
+            transform.position = GameObject.Find("HoldPoint").transform.position;
+        }
+
+        //After ball is thrown, respawn after [respawnTime] seconds
+        if (ballThrown)
+        {
+            timer += Time.deltaTime; //Increment timer every frame
+
+            //If the ball has been thrown more than [respawnTime] seconds ago, respawn in ballReturn
+            if (timer >= respawnTime)
+            {
+                //If there are still ball left to spawn, respawn ball
+                if (spt_scoreKeeper.ballsToSpawn > 0 || spt_scoreKeeper.infiniteMode)
+                {
+                    transform.rotation = Quaternion.Euler(Vector3.zero);
+                    transform.position = GameObject.Find("BallRespawnPoint").transform.position;
+                    rb.velocity = Vector3.zero;
+                    rb.AddForce(0, 0, -50);
+                    timer = 0;
+                    ballThrown = false;
+                }
+                //Otherwise permanently destroy ball
+                else
+                {
+                    Destroy(gameObject);
+                }
+                if (!spt_scoreKeeper.infiniteMode) spt_scoreKeeper.ballsRemaining--;
+            }
+        }
+    }
+
     private void HandleClick()
     {
         //PICK UP
-        if (!ballHeld && !ballThrown)
+        if (!ballHeld && !ballThrown && !spt_scoreKeeper.gameOver)
         {
             rb.velocity = Vector3.zero;
             transform.rotation = Quaternion.Euler(Vector3.zero);
@@ -51,8 +101,6 @@ public class spt_skeeBall : MonoBehaviour {
         //STORE POWER
         if (ballHeld && Input.GetButton("Fire1") && throwForce < maxThrowForce) {
             throwForce += 5;
-            Debug.Log("ThrowForce: " + throwForce);
-            //Increment radial to reflect current power
             //MIN: 300 | MAX: 800 | RANGE: 500
             //Normalize the current throwforce to set the radial fillAmount
             selectionRadial.enabled = true;
@@ -78,46 +126,4 @@ public class spt_skeeBall : MonoBehaviour {
         }
     }
 
-
-    // Use this for initialization
-    void Start () {
-        //Find radial and rigidbody component, initialize throwForce to base
-        selectionRadial = GameObject.Find("UISelectionBar").GetComponent<Image>();
-        rb = GetComponent<Rigidbody>();
-        throwForce = baseThrowForce;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
-        //Keep the skeeball in front of players at all times
-        if (ballHeld) {
-            rb.velocity = Vector3.zero;
-            transform.rotation = GameObject.Find("HoldPoint").transform.rotation;
-            transform.position = GameObject.Find("HoldPoint").transform.position;
-        } 
-
-        //After ball is thrown, respawn after [respawnTime] seconds
-        if (ballThrown) {
-            timer += Time.deltaTime; //Increment timer every frame
-
-            //If the ball has been thrown more than [respawnTime] seconds ago, respawn in ballReturn
-            if (timer >= respawnTime)
-            {
-                //If there are balls remaining, respawn ball
-                if (spt_scoreKeeper.ballsRemaining > 0)
-                {
-                    transform.rotation = Quaternion.Euler(Vector3.zero);
-                    transform.position = GameObject.Find("BallRespawnPoint").transform.position;
-                    rb.velocity = Vector3.zero;
-                    rb.AddForce(0, 0, -50);
-                    timer = 0;
-                    ballThrown = false;
-                    if (!spt_scoreKeeper.infiniteMode) spt_scoreKeeper.ballsRemaining--;
-                }
-                //Otherwise permanently destroy ball
-                else Destroy(gameObject);
-            }
-        } 
-	}
 }

@@ -3,8 +3,8 @@ using System.Collections;
 
 public class spt_activeZone : MonoBehaviour {
 
-    //When the ball falls through the hole, increase score by scoreValue
-    void OnTriggerEnter(Collider col)
+    //While the ball is rolling near the holes don't despawn
+    void OnTriggerStay(Collider col)
     {
         if (col.gameObject.tag == "skeeBall")
         {
