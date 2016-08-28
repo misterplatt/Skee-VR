@@ -7,28 +7,31 @@ using VRStandardAssets.Utils;
 
 public class spt_skeeBall : MonoBehaviour {
 
-    Rigidbody rb;
+    //Force constants
     public float baseThrowForce = 300f;
     public float maxThrowForce = 800f;
+
+    //Respawn time
     public float respawnTime = 1.25f;
 
-    private float throwForce;
-    private bool ballThrown = false;
-    private bool ballHeld = false;
+    protected Rigidbody rb;
+    protected float throwForce;
+    protected bool ballThrown = false;
+    protected bool ballHeld = false;
     [HideInInspector] public float timer = 0f;
     
     public Image selectionRadial;         // This controls when the selection is complete.
 
     [SerializeField] private VRInteractiveItem m_InteractiveItem;       // The interactive item for where the user should click to load the level.
 
-    private void OnEnable()
+    virtual protected void OnEnable()
     {
         m_InteractiveItem.OnClick += HandleClick;
         m_InteractiveItem.OnDown += HandleDown;
         m_InteractiveItem.OnUp += HandleUp;
     }
 
-    private void OnDisable()
+    virtual protected void OnDisable()
     {
         m_InteractiveItem.OnClick -= HandleClick;
         m_InteractiveItem.OnDown -= HandleDown;
@@ -36,7 +39,7 @@ public class spt_skeeBall : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start()
+    virtual protected void Start()
     {
         //Find radial and rigidbody component, initialize throwForce to base
         selectionRadial = GameObject.Find("UISelectionBar").GetComponent<Image>();
@@ -45,10 +48,14 @@ public class spt_skeeBall : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update()
+    virtual protected void Update()
     {
         //Destroy skeeball in hand on gameOver
-        if (ballHeld && spt_scoreKeeper.gameOver) Destroy(gameObject);
+        if (ballHeld && spt_scoreKeeper.gameOver) {
+            selectionRadial.fillAmount = 0;
+            selectionRadial.enabled = false;
+            Destroy(gameObject);
+        } 
         //Keep the skeeball in front of players at all times
         if (ballHeld)
         {
@@ -76,8 +83,7 @@ public class spt_skeeBall : MonoBehaviour {
                     ballThrown = false;
                 }
                 //Otherwise permanently destroy ball
-                else
-                {
+                else {
                     Destroy(gameObject);
                 }
                 if (!spt_scoreKeeper.infiniteMode) spt_scoreKeeper.ballsRemaining--;
@@ -85,7 +91,7 @@ public class spt_skeeBall : MonoBehaviour {
         }
     }
 
-    private void HandleClick()
+    virtual protected void HandleClick()
     {
         //PICK UP
         if (!ballHeld && !ballThrown && !spt_scoreKeeper.gameOver)
@@ -96,7 +102,7 @@ public class spt_skeeBall : MonoBehaviour {
         }
     }
 
-    private void HandleDown()
+    virtual protected void HandleDown()
     {
         //STORE POWER
         if (ballHeld && Input.GetButton("Fire1") && throwForce < maxThrowForce) {
@@ -108,7 +114,7 @@ public class spt_skeeBall : MonoBehaviour {
         }
     }
 
-    private void HandleUp()
+    virtual protected void HandleUp()
     {
         //FIRE AT STORED POWER
         if (ballHeld) {

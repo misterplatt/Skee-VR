@@ -8,7 +8,7 @@ public class spt_scoreKeeper : MonoBehaviour {
     public static int score = 0;
     
     //TIMES
-    public static int startingTimeLimit = 5;
+    public static int startingTimeLimit = 30;
     public static float timeRemainingInSeconds = startingTimeLimit;
 
     //BALL COUNTS
@@ -18,7 +18,7 @@ public class spt_scoreKeeper : MonoBehaviour {
 
     //MODES
     public static bool infiniteMode = false;
-    public static bool timeTrialMode = true;
+    public static bool timeTrialMode = false;
     public static bool gameOver = false;
 
     public GameObject menuCanvas;
@@ -27,6 +27,9 @@ public class spt_scoreKeeper : MonoBehaviour {
     // Use this for initialization
     void Start () {
         counterText = GetComponent<Text>();
+        startingBallCount = 5;
+        ballsToSpawn = startingBallCount;
+        ballsRemaining = startingBallCount;
         if (timeTrialMode) infiniteMode = true;
         if (gameObject.name == "BallsRemaining" && infiniteMode) counterText.text = "∞";
     }

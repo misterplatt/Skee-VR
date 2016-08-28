@@ -10,8 +10,7 @@ public class spt_ballDispenser : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        //Spawn the first ball
-        SpawnBall();
+
     }
 	
 	// Update is called once per frame
@@ -19,6 +18,7 @@ public class spt_ballDispenser : MonoBehaviour {
         if (spt_scoreKeeper.ballsToSpawn != 0) {
             timer += Time.deltaTime;
             if (timer >= spawnRate) {
+                Debug.Log("SPAWNING");
                 SpawnBall();
             }
         }
