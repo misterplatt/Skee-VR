@@ -19,6 +19,7 @@ public class spt_modeBall : spt_skeeBall
         if (ballHeld)
         {
             rb.velocity = Vector3.zero;
+            rb.isKinematic = false;
             transform.rotation = GameObject.Find("HoldPoint").transform.rotation;
             transform.position = GameObject.Find("HoldPoint").transform.position;
         }
@@ -30,10 +31,11 @@ public class spt_modeBall : spt_skeeBall
             //If the ball has been thrown more than [respawnTime] seconds ago, respawn in ballReturn
             if (timer >= respawnTime)
             {
-                rb.useGravity = false;
                 rb.velocity = Vector3.zero;
+                rb.useGravity = false;
                 transform.rotation = Quaternion.Euler(Vector3.zero);
                 transform.position = origin;
+                rb.isKinematic = true;
                 timer = 0;
                 ballThrown = false;
             }
