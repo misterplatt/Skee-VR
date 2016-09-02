@@ -9,6 +9,8 @@ public class spt_scoreZone : MonoBehaviour {
     void OnTriggerEnter(Collider col) {
         if (col.gameObject.tag == "skeeBall") {
             spt_scoreKeeper.score += scoreValue;
+            if(GetComponent<ParticleSystem>() != null) GetComponent<ParticleSystem>().Play();
+            if(GetComponent<AudioSource>() != null) GetComponent<AudioSource>().Play();
         }
     }
 }

@@ -24,7 +24,13 @@ public class spt_levelZone : MonoBehaviour
             spt_scoreKeeper.timeTrialMode = false;
             spt_scoreKeeper.infiniteMode = true;
         }
-        SceneManager.LoadScene(levelToLoad);
+        if (GetComponent<ParticleSystem>() != null) GetComponent<ParticleSystem>().Play();
+        if (GetComponent<AudioSource>() != null) GetComponent<AudioSource>().Play();
+        Invoke("CustomLoadScene", 1f);
 
+    }
+
+    void CustomLoadScene() {
+        SceneManager.LoadScene(levelToLoad);
     }
 }
