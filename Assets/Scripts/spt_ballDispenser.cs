@@ -18,7 +18,7 @@ public class spt_ballDispenser : MonoBehaviour {
         if (spt_scoreKeeper.ballsToSpawn != 0) {
             timer += Time.deltaTime;
             if (timer >= spawnRate) {
-                Debug.Log("SPAWNING");
+                //Debug.Log("SPAWNING");
                 SpawnBall();
             }
         }
