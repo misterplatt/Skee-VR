@@ -36,7 +36,7 @@ public class spt_scoreKeeper : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        //if (Input.GetKeyDown(KeyCode.I)) infiniteMode = !infiniteMode;
+        if (Input.GetKeyDown(KeyCode.I)) infiniteMode = true;
         //Update machine dispays
         if (gameObject.name == "Score") counterText.text = score.ToString();
         if (gameObject.name == "BallsRemaining" && !infiniteMode) counterText.text = ballsRemaining.ToString();
