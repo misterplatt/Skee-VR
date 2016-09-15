@@ -110,7 +110,7 @@ public class spt_skeeBall : MonoBehaviour {
             //MIN: 300 | MAX: 800 | RANGE: 500
             //Normalize the current throwforce to set the radial fillAmount
             selectionRadial.enabled = true;
-            selectionRadial.fillAmount = (throwForce - 300) / 500;
+            selectionRadial.fillAmount = (throwForce - baseThrowForce) / (maxThrowForce - baseThrowForce);
         }
     }
 
