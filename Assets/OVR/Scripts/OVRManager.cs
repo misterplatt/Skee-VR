@@ -372,7 +372,9 @@ public class OVRManager : MonoBehaviour
 
 		if (isHmdPresent)
 		{
-			OVRPlugin.queueAheadFraction = (queueAhead) ? 0.25f : 0f;
+            transform.position = new Vector3(transform.position.x, 0.3f, transform.position.z);
+            Debug.Log("HEADSET FOUND");
+            OVRPlugin.queueAheadFraction = (queueAhead) ? 0.25f : 0f;
 		}
 
 		if (HMDLost != null && wasHmdPresent && !isHmdPresent)
